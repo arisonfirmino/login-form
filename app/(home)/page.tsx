@@ -1,5 +1,6 @@
 import { CopyrightIcon } from "lucide-react";
 import SignInForm from "./_components/signin-form";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -13,9 +14,9 @@ export default function Home() {
 
         <div className="text-center">
           <p>Ainda não tem uma conta ?</p>
-          <a href="#" className="text-cyan hover:underline">
+          <Link href="signup" className="text-cyan hover:underline">
             Criar Conta
-          </a>
+          </Link>
         </div>
 
         <p className="absolute bottom-0 mb-2.5 mt-10 flex items-center gap-1 text-xs font-light opacity-60 sm:relative sm:mb-0">

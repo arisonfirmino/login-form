@@ -4,7 +4,7 @@ export default function SignInForm() {
       <div className="flex flex-col gap-1">
         <label className="ml-2.5 text-lg font-medium">Email</label>
         <input
-          type="text"
+          type="email"
           placeholder="Digite seu email"
           className="shadow-cyan-shadow rounded-xl p-2.5 text-black outline-none"
         />
