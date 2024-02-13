@@ -1,54 +1,84 @@
-export default function SignUpForm() {
-  return (
-    <form className="flex w-full flex-col gap-5">
-      <section className="flex flex-col gap-5 sm:flex-row">
-        <div className="flex flex-col gap-1">
-          <label className="ml-2.5 text-lg font-medium">Nome</label>
-          <input
-            type="text"
-            placeholder="Digite seu nome"
-            className="shadow-cyan-shadow rounded-xl p-2.5 text-black outline-none"
-          />
-        </div>
+"use client";
 
-        <div className="flex flex-col gap-1">
-          <label className="ml-2.5 text-lg font-medium">Sobrenome</label>
-          <input
-            type="text"
-            placeholder="Digite seu sobrenome"
-            className="shadow-cyan-shadow rounded-xl p-2.5 text-black outline-none"
-          />
-        </div>
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import InputField from "./input-field";
+
+const schema = yup.object({
+  name: yup.string().required("Este campo é obrigatório."),
+  surname: yup.string().required("Este campo é obrigatório."),
+  email: yup
+    .string()
+    .required("Este campo é obrigatório.")
+    .email("Por favor, insira um email válido."),
+  password: yup
+    .string()
+    .required("Este campo é obrigatório.")
+    .min(8, "A senha precisa ter no mínimo 8 caracteres."),
+  passwordConfirmation: yup
+    .string()
+    .required("Este campo é obrigatório.")
+    .oneOf([yup.ref("password"), null!], "As senhas não conferem"),
+});
+
+export default function SignUpForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+  const onSubmit = () => {
+    alert("DEU CERTO");
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex w-full flex-col gap-5"
+    >
+      <section className="flex flex-col gap-5 sm:flex-row">
+        <InputField
+          label="Nome"
+          register={register("name")}
+          type="text"
+          placeholder="Digite seu nome"
+          error={errors.name?.message}
+        />
+        <InputField
+          label="Sobrenome"
+          register={register("surname")}
+          type="text"
+          placeholder="Digite seu sobrenome"
+          error={errors.surname?.message}
+        />
       </section>
 
-      <div className="flex flex-col gap-1">
-        <label className="ml-2.5 text-lg font-medium">Email</label>
-        <input
-          type="email"
-          placeholder="Digite seu email"
-          className="shadow-cyan-shadow rounded-xl p-2.5 text-black outline-none"
-        />
-      </div>
+      <InputField
+        label="Email"
+        register={register("email")}
+        type="email"
+        placeholder="Digite seu email"
+        error={errors.email?.message}
+      />
 
-      <div className="flex flex-col gap-1">
-        <label className="ml-2.5 text-lg font-medium">Senha</label>
-        <input
-          type="password"
-          placeholder="Digite sua senha"
-          className="shadow-cyan-shadow rounded-xl p-2.5 text-black outline-none"
-        />
-      </div>
+      <InputField
+        label="Senha"
+        register={register("password")}
+        type="password"
+        placeholder="Digite sua senha"
+        error={errors.password?.message}
+      />
 
-      <div className="flex flex-col gap-1">
-        <label className="ml-2.5 text-lg font-medium">
-          Confirmação de senha
-        </label>
-        <input
-          type="password"
-          placeholder="Digite sua senha novamente"
-          className="shadow-cyan-shadow rounded-xl p-2.5 text-black outline-none"
-        />
-      </div>
+      <InputField
+        label="Confirmação de senha"
+        register={register("passwordConfirmation")}
+        type="password"
+        placeholder="Digite sua senha novamente"
+        error={errors.passwordConfirmation?.message}
+      />
 
       <button className="rounded-xl bg-cyan p-2.5 text-lg uppercase text-black duration-500 hover:bg-dark-blue hover:text-cyan">
         Enviar
