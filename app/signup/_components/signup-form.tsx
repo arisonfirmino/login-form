@@ -22,16 +22,27 @@ const schema = yup.object({
     .oneOf([yup.ref("password"), null!], "As senhas não conferem"),
 });
 
+import { api } from "@/app/api/api";
+
 export default function SignUpForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const onSubmit = () => {
-    alert("DEU CERTO");
+
+  const onSubmit = async () => {
+    const response = await api.post("/user", {
+      name: watch("name"),
+      surname: watch("surname"),
+      email: watch("email"),
+      password: watch("password"),
+    });
+
+    console.log(response.data);
   };
 
   return (
